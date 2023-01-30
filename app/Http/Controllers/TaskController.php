@@ -4,42 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
-    private $taskList = [
-        'first' => 'Eat',
-        'second' => 'Work',
-        'third' => 'play'
-    ]; 
 
     public function index(Request $request) {
-        // if ($request -> search) {
-        //     return $this -> taskList[$request -> search];
-        // }
-        // return $this -> taskList;
         if ($request -> search) {
-            $task = DB::table('tasks')
-            ->where('task', 'LIKE', "%$request->search%")
+            $task = Task::where('task', 'LIKE', "%$request->search%")
             ->get();
 
             return $task;
         }
-        $task = DB::table('tasks')->get();
+        $task = Task::all();
         return $task;
         
     }
 
     public function show($id) {
-        $task = DB::table('tasks')
-        ->where('id', $id)
-        ->get();
+        $task = Task::find($id);
         return $task;
     }
 
     public function store(Request $request){
-        DB::table('tasks')
-        ->insert([
+        Task::create([
             'task' => $request->task,
             'user' => $request->user
         ]);
@@ -47,18 +35,16 @@ class TaskController extends Controller
     }
     
     public function update(Request $request, $id){
-        DB::table('tasks')
-        ->where('id', $id)
-        ->update([
+        $task = Task::find($id);
+        $task->update([
             'task' => $request->task,
             'user' => $request->user
         ]);
-        return 'Success';
+        return $task;
     }
 
     public function delete($id) {
-        DB::table('tasks')
-        ->where('id', $id)
+        $task = Task::find($id)
         ->delete();
         return 'Success';
     }
