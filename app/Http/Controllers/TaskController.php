@@ -26,6 +26,10 @@ class TaskController extends Controller
         return $task;
     }
 
+    public function create(){
+        return view('task.create');
+    }
+
     public function store(Request $request){
         Task::create([
             'task' => $request->task,
@@ -34,6 +38,10 @@ class TaskController extends Controller
         return 'Success';
     }
     
+public function edit($id){
+    return view('task.edit');
+}
+
     public function update(Request $request, $id){
         $task = Task::find($id);
         $task->update([
